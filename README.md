@@ -1,7 +1,7 @@
 # ReachAI 🚀
-### Autonomous Outbound Intelligence for Modern Sales
+### Autonomous Outbound Intelligence for Modern Outreach
 
-**ReachAI** is an AI-powered outbound automation engine that handles the heavy lifting of lead discovery, email personalization, and automated outreach. Built with a modular agent architecture for maximum extensibility.
+**ReachAI** is an AI-powered multi orchaestrated outbound automation engine that handles the heavy lifting of lead discovery, email personalization, and automated outreach. Built with a modular agent architecture for maximum extensibility.
 
 > ⚠️ **Status: Active Development** - Core features are functional, more integrations coming soon!
 
