@@ -1,0 +1,52 @@
+{
+  "sap_consultant": {
+    "name": "SAP Specialist",
+    "resume": "resume_rikin.pdf",
+    "role_keywords": [
+      "sap",
+      "consultant",
+      "erp",
+      "bw",
+      "hana",
+      "bods",
+      "s/4",
+      "abap"
+    ],
+    "custom_template": "<p>Greetings {recruiter_name},</p><p><br></p><p>I hope this email finds you well. My name is Rikin Shah, and I am reaching out regarding the {role} position at {company}. With a Master's in IT from Arizona State University, a Certified Scrum Master (CSM) certification, and extensive hands-on experience in SAP BODS, BW4/HANA, and Analytics, I am confident I can contribute significant value to your team.</p><p><br></p><p>Over the past several years, I have:</p><p>• Led end-to-end SAP ERP implementations at Deloitte Consulting, supporting SAP (ABAP, BW, BW/4HANA, Datasphere, S/4 HANA). My involvement ranged from requirements gathering and data modeling to project delivery.</p><p>• Developed and optimized critical reporting and analytics solutions using BW, HANA, Tableau, and BusinessObjects. I have experience designing scalable ETL pipelines in SAP BODS and creating dynamic dashboards for OTC and financial processes.</p><p>• Utilized EDI, ALE/IDocs, BAPIs, and RFCs for seamless system integration.</p><p>• Supported functional and technical enhancements in fast-paced environments, collaborating closely with business stakeholders to deliver timely solutions and ongoing production support.</p><p><br></p><p>I would love to connect to discuss how my skills align with {company}'s current needs. Attached, please find my resume for your review.</p><p><br></p><p>Best regards,</p><p><br></p><p>Thanks and regards,</p><p>Rikin Shah, MS, CSM, SAP.</p><p>rshah88@asu.edu | (917)-238-5682</p><p><a href=\"https://www.linkedin.com/in/rikinshah787\" target=\"_blank\">LinkedIn</a> | Portfolio | GitHub</p>"
+  },
+  "ai_genai": {
+    "name": "AI/GenAI Engineer",
+    "resume": "resume_rikin.pdf",
+    "role_keywords": [
+      "ai",
+      "genai",
+      "machine learning",
+      "llm",
+      "automation",
+      "agentic",
+      "nlp",
+      "vision"
+    ],
+    "custom_template": "Hi {recruiter_name},\n\nI'm Rikin Shah, and I've been following {company}'s work for some time. I'm reaching out regarding the {role} position or potential opportunities in the AI/Automation space.\n\nMy background includes work at Deloitte as a Data Analyst and a Master's from ASU. Recently, I've pivoted strictly into the GenAI space, building agentic AI workflow systems. A few highlights:\n• OrchestrateIQ: An IBM Watson Hackathon winner delivering agentic automation across HR, Sales, and Finance (https://ibm-aiorch-u5vh.vercel.app/).\n• Wildflower Coalition: A dynamic blog platform with integrated AI-driven admin tools.\n• Tech Stack: I live in Cursor and n8n, leveraging LangChain, Crew.ai, AWS Bedrock, and various LLMs to build autonomous agents that drive business impact.\n\nI don't just \"use\" AI—I build systems that leverage it for real-world innovation. I would love to discuss how I can help {company} stay at the forefront of this space.\n\nMy resume is attached. Are you available for a brief conversation this week?\n\n--\nThanks and regards,\nRikin Shah, MS, CSM, SAP.\nrshah88@asu.edu | (917)-238-5682\nLinkedIn | Portfolio | GitHub"
+  },
+  "software_engineer": {
+    "name": "Software Engineer",
+    "resume": "resume_rikin.pdf",
+    "role_keywords": [
+      "software engineer",
+      "developer",
+      "full-stack",
+      "backend",
+      "frontend",
+      "se3",
+      "python",
+      "react",
+      "node"
+    ]
+  },
+  "general": {
+    "name": "General Professional",
+    "resume": "resume_rikin.pdf",
+    "role_keywords": []
+  }
+}

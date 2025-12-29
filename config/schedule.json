@@ -1,0 +1,13 @@
+{
+  "auto_enabled": false,
+  "start_time": "2025-12-27T21:04",
+  "end_time": "2025-12-28T21:44",
+  "batch_size": 20,
+  "batch_interval": 60,
+  "daily_limit": 50,
+  "delay_seconds": 30,
+  "business_hours_only": false,
+  "start_hour": 9,
+  "end_hour": 17,
+  "smtp_email": "rikinshah787@gmail.com"
+}

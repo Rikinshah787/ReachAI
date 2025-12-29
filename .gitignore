@@ -1,0 +1,40 @@
+# Environment
+.env
+*.env.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+env/
+
+# Logs (keep structure, ignore content)
+logs/*.csv
+logs/*.log
+logs/*.json
+!logs/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+disk_test.txt
+
+# Test artifacts
+*.webp
+.ipynb_checkpoints/
+
+# Data (personal data, keep sample structure)
+data/recruiters.csv
+data/*.pdf
+!data/sample_recruiters.csv
+test.csv

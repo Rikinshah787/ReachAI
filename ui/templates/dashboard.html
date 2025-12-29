@@ -1,0 +1,2492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReachAI | Premium Outreach Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Quill.js for Rich Text Editing -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --primary-light: #818cf8;
+            --secondary: #64748b;
+            --success: #059669;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --background: #fdfdff;
+            --surface: rgba(255, 255, 255, 0.85);
+            --text: #0f172a;
+            --subtitle: #64748b;
+            --border: rgba(226, 232, 240, 0.6);
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+            --radius: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 4rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.5rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            padding: 1.75rem 2.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.4rem;
+            box-shadow: 0 8px 16px rgba(79, 70, 229, 0.25);
+        }
+
+        .logo-text h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.7px;
+            background: linear-gradient(to right, #1e293b, #4f46e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .logo-text p {
+            font-size: 0.8rem;
+            color: var(--subtitle);
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .time-info {
+            text-align: right;
+        }
+
+        .time-info #current-time {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+
+        .time-info #timezone {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--subtitle);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 3rem;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            padding: 0.6rem;
+            border-radius: 22px;
+            width: fit-content;
+            border: 1px solid var(--border);
+        }
+
+        .tab {
+            padding: 0.85rem 1.75rem;
+            border: none;
+            background: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .tab:hover {
+            color: var(--primary);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+            animation: slideUp 0.4s cubic-bezier(0, 0, 0.2, 1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
+            opacity: 0.2;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-card .label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--subtitle);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .stat-card.sent .value {
+            color: var(--primary);
+        }
+
+        .stat-card.failed .value {
+            color: var(--danger);
+        }
+
+        .stat-card.replied .value {
+            color: var(--success);
+        }
+
+        .card {
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            letter-spacing: -0.5px;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .schedule-info {
+            padding: 2rem;
+            background: rgba(248, 250, 252, 0.8);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .schedule-item:last-child {
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .schedule-item .label {
+            font-weight: 700;
+            color: var(--subtitle);
+            font-size: 0.9rem;
+        }
+
+        .schedule-item .value {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .template-list {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .template-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.75rem 2rem;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .template-item:hover {
+            border-color: var(--primary-light);
+            background: white;
+            box-shadow: var(--shadow);
+            transform: scale(1.01);
+        }
+
+        .template-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .template-name {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 0.4rem;
+            color: #1e293b;
+        }
+
+        .template-rate {
+            font-size: 0.85rem;
+            color: var(--subtitle);
+            font-weight: 600;
+        }
+
+        .template-counts {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .count-group {
+            text-align: center;
+        }
+
+        .count-val {
+            font-weight: 800;
+            font-size: 1.25rem;
+            display: block;
+        }
+
+        .count-lbl {
+            font-size: 0.7rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .activity-item {
+            padding: 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .activity-item:last-child {
+            border: none;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .activity-company {
+            font-weight: 800;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .activity-details {
+            font-size: 0.95rem;
+            color: var(--subtitle);
+            font-weight: 500;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 99px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-top: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .status-sent {
+            background: #e0e7ff;
+            color: var(--primary-dark);
+        }
+
+        .status-replied {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-failed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .discovery-input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            background: white;
+            padding: 0.6rem;
+            border-radius: 18px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border);
+        }
+
+        .discovery-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
+            font-weight: 500;
+            outline: none;
+            color: var(--text);
+        }
+
+        .discovery-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .discovery-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .discovery-btn:active {
+            transform: translateY(0);
+        }
+
+        .pulse-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--subtitle);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .pulse {
+            width: 10px;
+            height: 10px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.7);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(5, 150, 105, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(5, 150, 105, 0);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            color: var(--secondary);
+            font-style: italic;
+            font-size: 1rem;
+        }
+
+        .import-btn {
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            padding: 0.6rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #1e293b;
+        }
+
+        .import-btn:hover {
+            background: var(--primary-light);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .refresh-notice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 3rem;
+            color: var(--subtitle);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-group">
+                <div class="logo-icon">R</div>
+                <div class="logo-text">
+                    <h1>ReachAI</h1>
+                    <p>Premium Outreach Intelligence</p>
+                </div>
+            </div>
+            <div class="time-info">
+                <div id="current-time"></div>
+                <div id="timezone"></div>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab active" onclick="switchTab('overview', event)">📈 Overview</button>
+            <button class="tab" onclick="switchTab('schedule', event)">⏰ Schedule</button>
+            <button class="tab" onclick="switchTab('templates', event)">📧 Templates</button>
+            <button class="tab" onclick="switchTab('activity', event)">📋 Activity</button>
+            <button class="tab" onclick="switchTab('discovery', event)">🚀 Discovery</button>
+            <button class="tab" onclick="switchTab('queue', event)">📥 Queue</button>
+            <button class="tab" onclick="switchTab('import', event)">📂 Import CSV</button>
+            <button class="tab" onclick="switchTab('settings', event)">⚙️ Settings</button>
+        </nav>
+
+        <!-- Overview Tab -->
+        <div id="overview-tab" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="label">Total Outreach</div>
+                    <div class="value" id="total-emails">0</div>
+                </div>
+                <div class="stat-card sent">
+                    <div class="label">Successfully Sent</div>
+                    <div class="value" id="sent-emails">0</div>
+                </div>
+                <div class="stat-card failed">
+                    <div class="label">Delivery Failures</div>
+                    <div class="value" id="failed-emails">0</div>
+                </div>
+                <div class="stat-card replied">
+                    <div class="label">Recruiter Replies</div>
+                    <div class="value" id="replied-emails">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Success Rate</div>
+                    <div class="value" id="success-rate">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Tab -->
+        <div id="schedule-tab" class="tab-content">
+
+            <!-- Active Schedule Display -->
+            <div id="active-schedule-card"
+                style="margin-top: 2rem; margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, var(--surface) 0%, var(--bg) 100%); border-radius: 12px; border: 2px solid var(--primary);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                    <h3 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                        📅 Active Schedule
+                        <span id="schedule-status-badge"
+                            style="font-size: 0.7rem; padding: 0.3rem 0.8rem; border-radius: 12px; background: var(--success); color: white; font-weight: bold;">ACTIVE</span>
+                    </h3>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button id="scheduler-toggle-btn" onclick="toggleScheduler()"
+                            style="padding: 0.5rem 1rem; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; min-width: 140px;">
+                            🛑 Stop Scheduler
+                        </button>
+                        <button onclick="switchTab('settings')"
+                            style="padding: 0.5rem 1rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                            ⚙️ Edit
+                        </button>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div id="next-run-card"
+                        style="padding: 1rem; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); border-radius: 8px; color: white;">
+                        <div
+                            style="font-size: 0.75rem; opacity: 0.9; font-weight: 800; text-transform: uppercase; margin-bottom: 0.3rem;">
+                            Next Scheduled Run</div>
+                        <div id="overview-countdown"
+                            style="font-size: 1.5rem; font-weight: bold; font-family: 'Courier New', monospace;">
+                            --:--:--</div>
+                        <div id="overview-next-date" style="font-size: 0.8rem; opacity: 0.8; margin-top: 0.25rem;">
+                        </div>
+                    </div>
+
+
+                    <div
+                        style="padding: 1rem; background: var(--surface); border-radius: 8px; border: 1px solid var(--border);">
+                        <div
+                            style="font-size: 0.75rem; color: var(--subtitle); font-weight: 800; text-transform: uppercase; margin-bottom: 0.3rem;">
+                            End Time</div>
+                        <div id="schedule-end-display"
+                            style="font-size: 1.1rem; font-weight: bold; color: var(--text);">
+                            Continuous</div>
+                    </div>
+
+                    <div
+                        style="padding: 1rem; background: var(--surface); border-radius: 8px; border: 1px solid var(--border);">
+                        <div
+                            style="font-size: 0.75rem; color: var(--subtitle); font-weight: 800; text-transform: uppercase; margin-bottom: 0.3rem;">
+                            Frequency</div>
+                        <div style="font-size: 1.1rem; font-weight: bold; color: var(--text);">Daily</div>
+                    </div>
+
+                    <div
+                        style="padding: 1rem; background: var(--surface); border-radius: 8px; border: 1px solid var(--border);">
+                        <div
+                            style="font-size: 0.75rem; color: var(--subtitle); font-weight: 800; text-transform: uppercase; margin-bottom: 0.3rem;">
+                            Batch Size</div>
+                        <div id="schedule-batch-display"
+                            style="font-size: 1.1rem; font-weight: bold; color: var(--text);">
+                            5 emails</div>
+                    </div>
+                </div>
+
+                <div id="schedule-days-remaining"
+                    style="margin-top: 1rem; padding: 0.8rem; background: var(--bg); border-radius: 6px; text-align: center; display: none;">
+                    <span style="font-weight: bold; color: var(--primary);" id="days-remaining-text"></span>
+                </div>
+            </div>
+
+            <!-- Send Now Section -->
+            <div class="card" style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem;">⚡ Send Now (Manual Trigger)</h3>
+                <p style="color: var(--subtitle); margin-bottom: 1.5rem;">Manually send emails to pending leads in
+                    queue</p>
+                <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem;">
+                    <input type="number" id="send-count" min="1" max="30" value="5"
+                        style="padding: 0.8rem; border: 2px solid var(--primary); border-radius: 8px; font-size: 1rem; width: 100px; text-align: center;">
+                    <button onclick="sendNow()" id="send-now-btn" class="discovery-btn"
+                        style="background: var(--success); padding: 1rem 2rem;">
+                        📧 Send Top <span id="send-count-display">5</span> Emails Now
+                    </button>
+                    <button onclick="stopSending()" id="stop-send-btn" class="discovery-btn"
+                        style="background: var(--danger); padding: 1rem 2rem; display: none;">
+                        🛑 Stop Sending
+                    </button>
+                </div>
+                <div id="send-status" style="margin-bottom: 1rem; font-weight: 700;"></div>
+
+                <!-- Live Activity Log -->
+                <div id="send-logs"
+                    style="background: var(--bg); border: 2px solid var(--primary); border-radius: 8px; padding: 1rem; max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 0.85rem; display: none; margin-bottom: 2rem;">
+                    <div style="color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">📊 Live Activity
+                        Log:</div>
+                    <div id="send-logs-content"></div>
+                </div>
+
+                <!-- Manual Send History -->
+                <div id="manual-send-history" class="card"
+                    style="margin-top: 2rem; border-color: #cbd5e1; background: #f8fafc;">
+                    <h3 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        🕓 Manual Send History
+                        <span id="click-count-badge"
+                            style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 99px; font-size: 0.8rem;">0
+                            clicks</span>
+                    </h3>
+                    <div id="history-list" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <!-- History items injected here -->
+                        <div style="color: var(--subtitle); font-style: italic; font-size: 0.9rem;">No manual sends
+                            recorded yet.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Templates Tab -->
+    <div id="templates-tab" class="tab-content">
+        <div class="card">
+            <h2>📧 Email Templates</h2>
+            <p style="color: var(--subtitle); margin-bottom: 2rem;">AI automatically selects the best template based
+                on role keywords</p>
+            <div id="template-stats" class="template-list">
+                <!-- Templates will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Tab -->
+    <div id="activity-tab" class="tab-content">
+        <div class="card">
+            <h2>📋 Outreach Log</h2>
+            <div id="recent-activity"></div>
+        </div>
+    </div>
+
+    <!-- Discovery Tab -->
+    <div id="discovery-tab" class="tab-content">
+        <div class="card">
+            <h2>🚀 AI Discovery Engine</h2>
+
+            <!-- Hunter.io Import Section (FREE - No Credits!) -->
+            <div
+                style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; color: white;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h3 style="margin: 0 0 0.5rem 0;">📥 Import from Hunter.io Leads Database</h3>
+                        <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Import leads you've already saved in
+                            Hunter.io - <strong>FREE, no credits consumed!</strong></p>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button onclick="importHunterLeads()" id="hunter-import-btn"
+                            style="background: white; color: #059669; border: none; padding: 1rem 2rem; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem;">
+                            🔄 Import New Leads
+                        </button>
+                        <button onclick="clearDiscovery()" id="clear-discovery-btn"
+                            style="background: rgba(239, 68, 68, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3); padding: 1rem 2rem; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem;">
+                            🗑️ Clear Discovery List
+                        </button>
+                    </div>
+
+                </div>
+                <div id="hunter-import-status" style="margin-top: 1rem; display: none;"></div>
+            </div>
+
+            <!-- AI Search Section (Uses Credits) -->
+            <div
+                style="background: var(--surface); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem;">
+                <h4 style="margin: 0 0 0.5rem 0; color: var(--text);">🔍 AI Domain Search <span
+                        style="font-size: 0.75rem; color: var(--danger); font-weight: 400;">(Uses Hunter.io
+                        credits)</span></h4>
+                <p style="margin: 0 0 1rem 0; color: var(--subtitle); font-size: 0.85rem;">AI finds companies, then
+                    Hunter.io finds contacts. Each domain searched costs credits.</p>
+                <div class="discovery-input-group">
+                    <input type="text" id="discovery-query" class="discovery-input"
+                        placeholder="Describe your ideal lead (e.g., AI startups hiring SDEs)...">
+                    <button onclick="runDiscovery()" id="discovery-btn" class="discovery-btn">
+                        Find Leads
+                    </button>
+                </div>
+            </div>
+
+            <div id="discovery-status" style="margin-bottom: 2rem; display: none;">
+                <div class="pulse-container">
+                    <span class="pulse"></span>
+                    <span>ReachAI is researching companies and fetching verified contacts from Hunter.io...</span>
+                </div>
+            </div>
+
+
+            <!-- Import All Buttons -->
+            <div id="import-all-controls"
+                style="display: none; margin-bottom: 2rem; text-align: center; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                <button onclick="importAllPage()" class="discovery-btn"
+                    style="background: var(--success); padding: 0.8rem 2rem;">
+                    Import All on This Page
+                </button>
+                <button onclick="importAllLeads()" class="discovery-btn"
+                    style="background: var(--primary-dark); padding: 0.8rem 2rem;">
+                    Import All Leads (All Pages)
+                </button>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div id="pagination-controls" style="display: none; margin-bottom: 2rem; text-align: center;">
+                <button onclick="changePage(-1)" class="import-btn" style="margin: 0 0.5rem;">◀ Previous</button>
+                <span id="page-info" style="font-weight: 700; color: var(--subtitle); margin: 0 1rem;">Page 1</span>
+                <button onclick="changePage(1)" class="import-btn" style="margin: 0 0.5rem;">Next ▶</button>
+            </div>
+
+            <div id="discovery-results" class="template-list">
+                <!-- Results will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Queue Tab -->
+    <div id="queue-tab" class="tab-content">
+        <div class="card">
+            <h2>📥 Imported Queue</h2>
+            <p style="color: var(--subtitle); margin-bottom: 1rem;">Leads imported from Discovery, ready for
+                outreach</p>
+            <div style="margin-bottom: 2rem; text-align: right;">
+                <button onclick="deleteAllQueue()" class="discovery-btn"
+                    style="background: var(--danger); padding: 0.8rem 2rem;">
+                    🗑️ Delete All Queue
+                </button>
+            </div>
+            <div id="queue-results" class="template-list">
+                <!-- Queue will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Import CSV Tab -->
+    <div id="import-tab" class="tab-content">
+        <div class="card">
+            <h2>📂 Import CSV File</h2>
+            <p style="color: var(--subtitle); margin-bottom: 2rem;">Upload your own lead list</p>
+
+            <div
+                style="border: 2px dashed var(--primary); border-radius: 12px; padding: 3rem; text-align: center; margin-bottom: 2rem;">
+                <input type="file" id="csv-file-input" accept=".csv" style="display: none;"
+                    onchange="handleCSVUpload(event)">
+                <button onclick="document.getElementById('csv-file-input').click()" class="discovery-btn"
+                    style="padding: 1rem 3rem;">
+                    📤 Choose CSV File
+                </button>
+                <p style="margin-top: 1rem; color: var(--subtitle);">
+                    Supports: Email, Name, Company, Position, Phone
+                    <br>
+                    <a href="/api/download/sample-csv"
+                        style="color: var(--primary); text-decoration: none; font-weight: bold; margin-top: 0.5rem; display: inline-block;">
+                        📥 Download Sample CSV Template
+                    </a>
+                </p>
+                <div id="csv-status" style="margin-top: 1rem;"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div id="settings-tab" class="tab-content">
+        <div class="card">
+            <h2>⚙️ System Configuration</h2>
+
+            <p style="color: var(--subtitle); margin-bottom: 2rem;">Configure your automated email scheduling.
+            </p>
+
+            <!-- Auto Pilot Section -->
+            <div
+                style="background: var(--bg); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--primary); margin-bottom: 2rem;">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label
+                        style="display: flex; align-items: center; gap: 1rem; cursor: pointer; font-weight: bold; color: var(--primary); font-size: 1.1rem;">
+                        <input type="checkbox" id="setting-auto-enabled" style="transform: scale(1.5);">
+                        Enable Background Auto-Sending
+                    </label>
+                    <p style="font-size: 0.9rem; color: var(--subtitle); margin-top: 0.5rem; margin-left: 2.2rem;">
+                        Automatically triggers email batches during business hours.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Scheduler Status with Live Countdown -->
+            <div id="scheduler-status-card"
+                style="margin-bottom: 2rem; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 1.5rem; border-radius: 12px; color: white; display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="margin: 0;">📡 Scheduler Status</h4>
+                    <span id="scheduler-state-badge"
+                        style="background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">Inactive</span>
+                </div>
+
+                <!-- Live Countdown Timer -->
+                <div id="countdown-container" style="text-align: center; padding: 1rem 0;">
+                    <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 0.5rem;">Next Scheduled Run</div>
+                    <div id="countdown-display"
+                        style="font-size: 2.5rem; font-weight: 700; font-family: 'Courier New', monospace; letter-spacing: 2px;">
+                        --:--:--
+                    </div>
+                    <div id="next-run-date" style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;"></div>
+                </div>
+
+                <p id="scheduler-message" style="margin: 0; text-align: center; font-size: 0.9rem; opacity: 0.9;">
+                </p>
+            </div>
+
+
+            <!-- Advanced Settings -->
+            <div id="auto-pilot-settings"
+                style="display: none; margin-bottom: 2rem; border-left: 3px solid var(--primary); padding-left: 1.5rem;">
+                <h3 style="margin-bottom: 1rem;">📅 Schedule Rules</h3>
+
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Start Date/Time</label>
+                    <input type="datetime-local" id="setting-start-time"
+                        style="width: 100%; max-width: 400px; padding: 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+                    <p style="font-size: 0.8rem; color: var(--subtitle); margin-top: 0.2rem;">Leave empty to start
+                        immediately</p>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">End Date/Time (Optional)</label>
+                    <input type="datetime-local" id="setting-end-time"
+                        style="width: 100%; max-width: 400px; padding: 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+                    <p style="font-size: 0.8rem; color: var(--subtitle); margin-top: 0.2rem;">Leave empty for
+                        continuous sending</p>
+                </div>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                    <div class="form-group" style="flex: 1; min-width: 200px;">
+                        <label style="display: block; margin-bottom: 0.5rem;">Batch Size (Emails per
+                            run)</label>
+                        <input type="number" id="setting-batch-size" value="5" min="1"
+                            style="width: 100%; padding: 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 200px;">
+                        <label style="display: block; margin-bottom: 0.5rem;">Send Interval</label>
+                        <select id="setting-batch-interval"
+                            style="width: 100%; padding: 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer;">
+                            <option value="60">Every 1 Hour</option>
+                            <option value="720">Every 12 Hours</option>
+                            <option value="1440">Every 1 Day</option>
+                            <option value="10080">Every 1 Week</option>
+                            <option value="43200">Every 1 Month (30 days)</option>
+                            <option value="custom">Custom (minutes)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="custom-interval-group"
+                        style="flex: 1; min-width: 200px; display: none;">
+                        <label style="display: block; margin-bottom: 0.5rem;">Custom Interval (Minutes)</label>
+                        <input type="number" id="setting-custom-interval" value="60" min="5"
+                            style="width: 100%; padding: 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+                    </div>
+                </div>
+
+                <script>
+                    document.getElementById('setting-batch-interval').addEventListener('change', function (e) {
+                        const customGroup = document.getElementById('custom-interval-group');
+                        customGroup.style.display = e.target.value === 'custom' ? 'block' : 'none';
+                    });
+                </script>
+
+            </div>
+
+            <script>
+                (function () {
+                    const el = document.getElementById('setting-auto-enabled');
+                    if (el) {
+                        el.addEventListener('change', function (e) {
+                            document.getElementById('auto-pilot-settings').style.display = e.target.checked ? 'block' : 'none';
+                            if (e.target.checked) pollSchedulerStatus();
+                        });
+                    }
+                })();
+            </script>
+
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem;">🛑 Safety Limits</h3>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem;">Daily Email Limit (Total)</label>
+                <input type="number" id="setting-daily-limit"
+                    style="width: 100%; max-width: 200px; padding: 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="checkbox" id="setting-business-hours">
+                    Only Send During Business Hours (9am - 5pm)
+                </label>
+            </div>
+
+            <!-- Hidden but required logic inputs -->
+            <input type="hidden" id="setting-delay" value="30">
+            <input type="hidden" id="setting-start-hour" value="9">
+            <input type="hidden" id="setting-end-hour" value="17">
+            <input type="hidden" id="setting-smtp-email">
+
+            <div style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); text-align: right;">
+                <button onclick="saveSettings()"
+                    style="background: var(--success); color: white; border: none; padding: 1rem 2rem; border-radius: 6px; cursor: pointer; font-size: 1.1rem; font-weight: bold;">
+                    💾 Save All Configuration
+                </button>
+                <div id="settings-status" style="margin-top: 1rem;"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="refresh-notice">
+        <span class="pulse"></span>
+        <span>ReachAI Core Active • Monitoring local outreach status • Data refreshed periodically</span>
+    </footer>
+    </div>
+
+    <script>
+        function switchTab(tabName, evt) {
+            console.log('🔄 switchTab called with:', tabName);
+
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
+
+            const target = document.getElementById(tabName + '-tab');
+            console.log('🎯 Target element:', target);
+            console.log('🔍 Looking for ID:', tabName + '-tab');
+
+            if (target) {
+                target.classList.add('active');
+                console.log('✅ Added active class to:', target.id);
+            } else {
+                console.error('❌ Element not found:', tabName + '-tab');
+            }
+
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add('active');
+            } else {
+                // Try to highlight sidebar button
+                const btn = document.querySelector(`.tab[onclick*="'${tabName}'"]`);
+                if (btn) btn.classList.add('active');
+            }
+        }
+
+        const templateSymbols = {
+            'sap_consultant': '💼', 'ai_genai': '🤖',
+            'software_engineer': '💻', 'general': '📋'
+        };
+
+        const templateNames = {
+            'sap_consultant': 'SAP Specialist', 'ai_genai': 'AI/GenAI Expert',
+            'software_engineer': 'Software Engineer', 'general': 'General Professional'
+        };
+
+        async function updateDashboard() {
+            try {
+                const response = await fetch('/api/stats');
+                if (!response.ok) return;
+                const data = await response.json();
+
+                document.getElementById('current-time').textContent = data.current_time;
+                document.getElementById('timezone').textContent = data.timezone;
+                document.getElementById('total-emails').textContent = data.stats.total;
+                document.getElementById('sent-emails').textContent = data.stats.sent;
+                document.getElementById('failed-emails').textContent = data.stats.failed;
+                document.getElementById('replied-emails').textContent = data.stats.replied;
+
+                const successRate = data.stats.total > 0 ? ((data.stats.sent / data.stats.total) * 100).toFixed(1) : 0;
+                document.getElementById('success-rate').textContent = successRate + '%';
+
+                // These elements were removed from Active Sending Logic section
+                const emailsTodayEl = document.getElementById('emails-today');
+                if (emailsTodayEl) emailsTodayEl.textContent = data.stats.sent;
+                const remainingEl = document.getElementById('remaining-today');
+                if (remainingEl) remainingEl.textContent = Math.max(0, 30 - data.stats.sent);
+
+
+                // REMOVED: Template stats display moved to updateTemplatesUI()
+                // This prevents auto-refresh from overwriting template content
+                // const templateContainer = document.getElementById('template-stats');
+                // ... stats display code removed ...
+
+                const activityContainer = document.getElementById('recent-activity');
+                if (data.recent.length > 0) {
+                    let html = '';
+                    data.recent.forEach(activity => {
+                        const statusClass = 'status-' + activity.status.toLowerCase().replace('_', '-');
+                        const symbol = templateSymbols[activity.template_used] || '📧';
+                        html += `
+                            <div class="activity-item">
+                                <div class="activity-header">
+                                    <span class="activity-company">${symbol} ${activity.company}</span>
+                                    <span class="activity-time">📅 ${activity.timestamp.substring(5, 7)}/${activity.timestamp.substring(8, 10)} • ⏰ ${activity.timestamp.substring(11, 16)}</span>
+                                </div>
+                                <div class="activity-details">
+                                    <strong>Target:</strong> ${activity.email}<br>
+                                    <span class="status-badge ${statusClass}">${activity.status}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    activityContainer.innerHTML = html;
+                } else {
+                    activityContainer.innerHTML = '<div class="empty-state">Outreach log is currently empty.</div>';
+                }
+
+                updateDiscoveryUI();
+            } catch (e) { console.error(e); }
+        }
+
+        async function toggleScheduler() {
+            try {
+                const btn = document.getElementById('scheduler-toggle-btn');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.textContent = '⏳ Processing...';
+                }
+
+                const response = await fetch('/api/scheduler/toggle', { method: 'POST' });
+                const data = await response.json();
+
+                if (response.ok) {
+                    await loadScheduleDisplay(); // Refresh UI
+                    await loadSettings(); // Sync Settings tab
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (e) {
+                console.error(e);
+            } finally {
+                const btn = document.getElementById('scheduler-toggle-btn');
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        async function importHunterLeads() {
+            const btn = document.getElementById('hunter-import-btn');
+            const status = document.getElementById('hunter-import-status');
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Checking for new leads...';
+            status.style.display = 'block';
+            status.innerHTML = '<div style="opacity: 0.9;">🔄 Connecting to Hunter.io and checking for NEW leads...</div>';
+
+            try {
+                const response = await fetch('/api/discover/hunter-leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Show detailed breakdown
+                    let html = `<div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 8px;">`;
+                    html += `<div style="font-weight: bold; margin-bottom: 0.5rem;">${data.message}</div>`;
+                    html += `<div style="display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.85rem; opacity: 0.9;">`;
+                    html += `<span>📊 Hunter.io Total: ${data.total_in_hunter || 0}</span>`;
+                    html += `<span>✨ New: ${data.new_leads || 0}</span>`;
+                    html += `<span>⏭️ Skipped: ${data.skipped || 0}</span>`;
+                    html += `<span>💾 Database Total: ${data.total_in_database || 0}</span>`;
+                    html += `</div></div>`;
+                    status.innerHTML = html;
+                    updateDiscoveryUI(); // Refresh the leads list
+                } else {
+                    status.innerHTML = `<div style="background: rgba(239,68,68,0.3); padding: 0.75rem; border-radius: 6px;">❌ ${data.error || 'Import failed'}</div>`;
+                }
+            } catch (e) {
+                status.innerHTML = `<div style="background: rgba(239,68,68,0.3); padding: 0.75rem; border-radius: 6px;">❌ Network error: ${e.message}</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🔄 Import New Leads';
+            }
+        }
+
+        async function clearDiscovery() {
+            if (!confirm('Are you sure you want to clear all discovered leads? This will delete the discovery results file.')) return;
+
+            const btn = document.getElementById('clear-discovery-btn');
+            const status = document.getElementById('hunter-import-status');
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Clearing...';
+
+            try {
+                const response = await fetch('/api/discover/clear', {
+                    method: 'POST'
+                });
+
+                if (response.ok) {
+                    status.style.display = 'block';
+                    status.innerHTML = `<div style="background: rgba(255,255,255,0.2); padding: 0.75rem; border-radius: 6px;">✅ Discovery results cleared successfully</div>`;
+                    updateDiscoveryUI(); // Refresh UI to show empty state
+                } else {
+                    alert('Failed to clear discovery results');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Network error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🗑️ Clear Discovery List';
+            }
+        }
+
+
+        async function runDiscovery() {
+            const query = document.getElementById('discovery-query').value;
+            if (!query) {
+                alert('Please enter a search query');
+                return;
+            }
+
+            const btn = document.getElementById('discovery-btn');
+            const status = document.getElementById('discovery-status');
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Searching...';
+            status.style.display = 'block';
+            status.innerHTML = `
+                <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; max-height: 300px; overflow-y: auto;">
+                    <div id="discovery-logs" style="font-family: monospace; font-size: 0.85rem; line-height: 1.6;">
+                        <div style="color: var(--primary);">🚀 Starting AI Discovery...</div>
+                        <div style="color: var(--subtitle);">Query: "${query}"</div>
+                        <div style="color: var(--warning);">⚠️ This will use Hunter.io credits for each domain searched</div>
+                        <div style="color: var(--subtitle);">---</div>
+                    </div>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/api/discover/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: query, max_domains: 5 })
+                });
+                const data = await response.json();
+
+                const logsContainer = document.getElementById('discovery-logs');
+
+                if (data.progress && data.progress.length > 0) {
+                    // Display all progress logs
+                    data.progress.forEach(log => {
+                        const color = {
+                            'ai': 'var(--primary)',
+                            'success': 'var(--success)',
+                            'error': 'var(--danger)',
+                            'warning': '#f59e0b',
+                            'hunter': '#8b5cf6',
+                            'progress': 'var(--text)',
+                            'start': 'var(--primary)',
+                            'info': 'var(--subtitle)',
+                            'divider': 'var(--border)'
+                        }[log.type] || 'var(--text)';
+
+                        if (log.type === 'divider') {
+                            logsContainer.innerHTML += `<div style="color: ${color}; margin: 0.5rem 0;">═══════════════════════════════════</div>`;
+                        } else {
+                            logsContainer.innerHTML += `<div style="color: ${color};">${log.message}</div>`;
+                        }
+                    });
+
+                    // Scroll to bottom
+                    logsContainer.parentElement.scrollTop = logsContainer.parentElement.scrollHeight;
+                }
+
+                if (data.status === 'success') {
+                    logsContainer.innerHTML += `<div style="color: var(--success); font-weight: bold; margin-top: 0.5rem;">✅ Found ${data.leads_found} leads!</div>`;
+                    updateDiscoveryUI();
+                } else if (data.error) {
+                    logsContainer.innerHTML += `<div style="color: var(--danger); font-weight: bold;">❌ Error: ${data.error}</div>`;
+                }
+
+                if (data.errors && data.errors.length > 0) {
+                    logsContainer.innerHTML += `<div style="color: var(--warning); margin-top: 0.5rem;">⚠️ ${data.errors.length} issues occurred</div>`;
+                }
+
+            } catch (e) {
+                console.error(e);
+                document.getElementById('discovery-logs').innerHTML += `<div style="color: var(--danger);">❌ Network error: ${e.message}</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Find Leads';
+                document.getElementById('discovery-query').value = '';
+
+                // Keep status visible to show results
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, 30000); // Hide after 30 seconds
+            }
+        }
+
+
+        async function updateDiscoveryUI() {
+            if (window.isUIBusy) return;
+            try {
+                const response = await fetch('/api/discover/results');
+                const leads = await response.json();
+                window.allLeads = leads; // Store globally
+                window.currentPage = window.currentPage || 1;
+
+                const container = document.getElementById('discovery-results');
+                const pageSize = 10; // Show 10 per page
+                const totalPages = Math.ceil(leads.length / pageSize);
+
+                if (leads.length > 0) {
+                    // Pagination
+                    const start = (window.currentPage - 1) * pageSize;
+                    const end = start + pageSize;
+                    const pageLeads = leads.slice(start, end);
+
+                    let html = '';
+                    pageLeads.forEach((lead, globalIndex) => {
+                        const actualIndex = start + globalIndex;
+                        const linkedinLink = lead.linkedin
+                            ? `<a href="${lead.linkedin}" target="_blank" style="color: var(--primary); text-decoration: none; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 4px;">🔗 LinkedIn</a>`
+                            : '';
+                        const phoneInfo = lead.phone
+                            ? `<span style="color: var(--success); font-weight: 600;">📞 ${lead.phone}</span>`
+                            : '';
+                        html += `
+                            <div class="template-item">
+                                <div class="template-meta">
+                                    <span class="template-name">👤 ${lead.first_name} ${lead.last_name || ''}</span>
+                                    <span class="template-rate">${lead.position} @ ${lead.company_name || lead.company}</span>
+                                    <div style="font-size: 0.75rem; color: var(--secondary); margin-top: 6px; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+                                        <span style="display: flex; align-items: center; gap: 4px;">📧 ${lead.email}</span>
+                                        ${phoneInfo}
+                                        ${linkedinLink}
+                                    </div>
+                                </div>
+                                <div class="template-counts" style="gap: 1.5rem; align-items: center;">
+                                    <button onclick="importLead(${actualIndex})" id="import-btn-${actualIndex}" class="import-btn">
+                                        Import Lead
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+
+                    // Show/hide pagination and import all buttons
+                    const paginationDiv = document.getElementById('pagination-controls');
+                    const importAllDiv = document.getElementById('import-all-controls');
+                    if (totalPages > 1) {
+                        paginationDiv.style.display = 'block';
+                        importAllDiv.style.display = 'flex';
+                        document.getElementById('page-info').textContent = `Page ${window.currentPage} of ${totalPages} (${leads.length} total leads)`;
+                    } else {
+                        paginationDiv.style.display = 'none';
+                        importAllDiv.style.display = 'none';
+                    }
+                    if (leads.length > 0) importAllDiv.style.display = 'flex';
+                } else {
+                    container.innerHTML = '<div class="empty-state">Trigger the AI Discovery Engine to harvest new leads.</div>';
+                    document.getElementById('pagination-controls').style.display = 'none';
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function changePage(direction) {
+            const pageSize = 10;
+            const totalPages = Math.ceil((window.allLeads || []).length / pageSize);
+            window.currentPage = (window.currentPage || 1) + direction;
+
+            if (window.currentPage < 1) window.currentPage = 1;
+            if (window.currentPage > totalPages) window.currentPage = totalPages;
+
+            updateDiscoveryUI();
+        }
+
+        async function updateQueueUI() {
+            if (window.isUIBusy) return;
+            try {
+                // Read CSV to show imported leads
+                const response = await fetch('/api/queue/status');
+                const data = await response.json();
+
+                const container = document.getElementById('queue-results');
+                const queue = data.queue || [];
+
+                if (queue.length > 0) {
+                    let html = '';
+                    queue.forEach((lead, index) => {
+                        const statusColor = {
+                            'pending': 'var(--warning)',
+                            'sent': 'var(--primary)',
+                            'replied': 'var(--success)',
+                            'failed': 'var(--danger)'
+                        }[lead.status] || 'var(--secondary)';
+
+                        const linkedinLink = lead.linkedin
+                            ? ` <a href="${lead.linkedin}" target="_blank" style="color: var(--primary); text-decoration: none; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 4px;">🔗 LinkedIn</a>`
+                            : '';
+                        const phoneInfo = lead.phone
+                            ? `<span style="color: var(--success); font-weight: 600;">📞 ${lead.phone}</span>`
+                            : '';
+
+                        html += `
+                            <div class="template-item">
+                                <div class="template-meta">
+                                    <span class="template-name">👤 ${lead.first_name}${linkedinLink}</span>
+                                    <span class="template-rate">🏢 ${lead.company} - ${lead.role_hiring_for}</span>
+                                    <div style="font-size: 0.75rem; color: var(--secondary); margin-top: 6px; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+                                        <span style="display: flex; align-items: center; gap: 4px;">📧 ${lead.email}</span>
+                                        ${phoneInfo}
+                                    </div>
+                                </div>
+                                <div class="template-counts" style="gap: 1.5rem; align-items: center;">
+                                    <span style="font-size: 0.9rem; font-weight: 800; color: ${statusColor};">
+                                        ${lead.status.toUpperCase()}
+                                    </span>
+                                    ${lead.status.toLowerCase() === 'sent' || lead.status.toLowerCase() === 'replied'
+                                ? '<button class="import-btn" disabled style="background: var(--secondary); opacity: 0.5; cursor: not-allowed;" title="Cannot delete sent emails">Remove</button>'
+                                : `<button class="remove-lead-btn import-btn" style="background: var(--danger); color: white; border-color: var(--danger);" onclick="window.handleRemoveLead('${lead.email.replace(/'/g, '')}', this)">Remove</button>`
+                            }
+                                </div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = '<div class="empty-state">No leads in queue yet. Import from Discovery tab.</div>';
+                }
+            } catch (e) {
+                console.error(e);
+                document.getElementById('queue-results').innerHTML = '<div class="empty-state">Queue loading...</div>';
+            }
+        }
+
+        async function importLead(index) {
+            const lead = window.allLeads[index];
+            const btn = document.getElementById(`import-btn-${index}`);
+
+            btn.disabled = true;
+            btn.textContent = 'Staging...';
+
+            try {
+                const response = await fetch('/api/leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        first_name: lead.first_name,
+                        email: lead.email,
+                        company: lead.company_name,
+                        role_hiring_for: lead.position,
+                        linkedin: lead.linkedin || ''
+                    })
+                });
+                if (response.ok) {
+                    btn.textContent = 'Imported';
+                    btn.style.background = 'var(--success)';
+                    btn.style.color = 'white';
+                    btn.style.borderColor = 'transparent';
+
+                    // Refresh queue immediately
+                    setTimeout(() => updateQueueUI(), 500);
+                }
+            } catch (e) {
+                console.error(e);
+                btn.disabled = false;
+                btn.textContent = 'Failed';
+            }
+        }
+
+        // Track ongoing removals globally
+        window.removingLeads = window.removingLeads || {};
+
+        async function removeLead(email) {
+            // Prevent duplicate calls
+            if (window.removingLeads[email]) {
+                console.log('Already removing:', email);
+                return;
+            }
+
+            if (!confirm(`Remove ${email} from queue?`)) {
+                return;
+            }
+
+            // Mark as removing
+            window.removingLeads[email] = true;
+
+            try {
+                const response = await fetch('/api/leads/remove', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
+
+                if (response.ok) {
+                    console.log('✅ Removed:', email);
+                    // Refresh queue after brief delay
+                    setTimeout(() => {
+                        delete window.removingLeads[email];
+                        updateQueueUI();
+                    }, 300);
+                } else if (response.status === 404) {
+                    // Lead already removed (race condition or double-click)
+                    console.log('Lead already removed:', email);
+                    delete window.removingLeads[email];
+                    updateQueueUI(); // Just refresh
+                } else {
+                    alert('Failed to remove lead');
+                    delete window.removingLeads[email];
+                }
+            } catch (e) {
+                console.error('Remove error:', e);
+                alert('Network error');
+                delete window.removingLeads[email];
+            }
+        }
+
+        async function importAllPage() {
+            const pageSize = 10;
+            const start = (window.currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageLeads = (window.allLeads || []).slice(start, end);
+
+            if (!pageLeads.length) return;
+
+            await importBulk(pageLeads, `Import all ${pageLeads.length} leads on this page?`);
+        }
+
+        async function importAllLeads() {
+            const leads = window.allLeads || [];
+            if (!leads.length) return;
+
+            await importBulk(leads, `Import ALL ${leads.length} leads from all pages?\nThis may take a moment.`);
+        }
+
+        async function importBulk(leads, confirmMsg) {
+            if (!confirm(confirmMsg)) return;
+
+            const formatted = leads.map(l => ({
+                first_name: l.first_name,
+                email: l.email,
+                company: l.company_name,
+                role_hiring_for: l.position
+            }));
+
+            try {
+                const response = await fetch('/api/leads/import-all', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ leads: formatted })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert(data.message);
+                    updateQueueUI(); // Refresh queue
+                    updateDiscoveryUI(); // Update buttons
+                } else {
+                    alert(`Error: ${data.error}`);
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Failed to import leads');
+            }
+        }
+
+        // CSV Upload Handler
+        window.csvData = null;
+
+        function handleCSVUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async function (e) {
+                const text = e.target.result;
+                const lines = text.split('\n').filter(l => l.trim() && l.trim() !== '.');
+
+                if (lines.length < 1) {
+                    alert('CSV file is empty or invalid');
+                    return;
+                }
+
+                // Check if first row looks like headers or data
+                const firstRow = lines[0].split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+                const hasEmailInFirstRow = firstRow.some(v => v.includes('@'));
+
+                let mapped = [];
+
+                if (hasEmailInFirstRow) {
+                    // No header row - parse positionally: Name, Email, Company, Position, LinkedIn
+                    for (let i = 0; i < Math.min(lines.length, 100); i++) {
+                        const values = lines[i].split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+                        if (values.length >= 2) {
+                            const emailIdx = values.findIndex(v => v.includes('@'));
+                            if (emailIdx !== -1) {
+                                mapped.push({
+                                    first_name: (values[0] || 'Contact').split(' ')[0],
+                                    email: values[emailIdx],
+                                    company: values[2] || '',
+                                    role_hiring_for: values[3] || '',
+                                    linkedin: values[4] || ''
+                                });
+                            }
+                        }
+                    }
+                } else {
+                    // Has header row - use original logic
+                    const headers = firstRow;
+                    for (let i = 1; i < Math.min(lines.length, 101); i++) {
+                        const values = lines[i].split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+                        const row = {};
+                        headers.forEach((h, idx) => row[h] = values[idx] || '');
+
+                        const firstName = row['Name'] || row['First Name'] || row['first_name'] || '';
+                        mapped.push({
+                            first_name: firstName.split(' ')[0],
+                            email: row['Email'] || row['Email Address'] || row['email'] || '',
+                            company: row['Company'] || row['Company Name'] || row['company'] || '',
+                            role_hiring_for: row['Position'] || row['Role'] || row['role_hiring_for'] || '',
+                            linkedin: row['LinkedIn'] || row['LinkedIn URL'] || row['linkedin'] || ''
+                        });
+                    }
+                    mapped = mapped.filter(r => r.email);
+                }
+
+                window.csvData = mapped;
+
+                // Show preview and import
+                document.getElementById('csv-status').innerHTML = `
+                    <p style="color: var(--success); font-weight: 700;">✅ ${mapped.length} leads ready to import</p>
+                    <button onclick="importCSVData()" class="discovery-btn" style="background: var(--success); margin-top: 1rem; padding: 1rem 3rem;">
+                        Import ${mapped.length} Leads to Queue
+                    </button>
+                `;
+            };
+            reader.readAsText(file);
+        }
+
+        async function importCSVData() {
+            if (!window.csvData) return;
+
+            try {
+                const response = await fetch('/api/leads/import-all', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ leads: window.csvData })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    let msg = `✅ Imported ${data.count} leads successfully!`;
+                    if (data.duplicates > 0) {
+                        msg += ` (${data.duplicates} duplicates were skipped as they already exist)`;
+                    }
+                    alert(msg);
+                    document.getElementById('csv-status').innerHTML = `<p style="color: var(--success); font-weight: bold;">${msg}</p>`;
+                    window.csvData = null;
+                    document.getElementById('csv-file-input').value = '';
+                    updateQueueUI();
+                } else {
+                    alert(`Error: ${data.error}`);
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Failed to import CSV');
+            }
+        }
+
+        // Global delete function - simple and direct
+        window.handleRemoveLead = async function (email, button) {
+            if (!email) {
+                alert('Error: No email provided');
+                return;
+            }
+
+            window.isUIBusy = true; // Pause refresh
+            const confirmed = confirm('Remove lead ' + email + ' from queue?');
+            if (!confirmed) {
+                window.isUIBusy = false;
+                return;
+            }
+
+            // Show loading state
+            if (button) {
+                button.disabled = true;
+                button.textContent = 'Removing...';
+            }
+
+            try {
+                const response = await fetch('/api/leads/remove', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
+
+                if (response.ok) {
+                    window.isUIBusy = false; // Allow refresh
+                    updateQueueUI();
+                } else {
+                    const data = await response.json();
+                    alert('Error: ' + (data.error || 'Failed to remove'));
+                    if (button) {
+                        button.disabled = false;
+                        button.textContent = 'Remove';
+                    }
+                    window.isUIBusy = false;
+                }
+            } catch (err) {
+                console.error('Remove lead error:', err);
+                alert('Network error - please try again');
+                if (button) {
+                    button.disabled = false;
+                    button.textContent = 'Remove';
+                }
+                window.isUIBusy = false;
+            }
+        };
+
+        // Keep old function name for compatibility
+        async function removeLead(email) {
+            window.handleRemoveLead(email, null);
+        }
+
+        async function deleteAllQueue() {
+            window.isUIBusy = true;
+            if (!confirm('⚠️ Delete ALL leads from queue?\n\nThis will remove all pending leads.\nSent emails cannot be deleted and will remain.')) {
+                window.isUIBusy = false;
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/leads/remove-all', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert(`✅ ${data.message}`);
+                    window.isUIBusy = false;
+                    updateQueueUI();
+                } else {
+                    alert(`Error: ${data.error}`);
+                    window.isUIBusy = false;
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Failed to delete queue');
+                window.isUIBusy = false;
+            }
+        }
+
+        // Global flags
+        let templatesLoaded = false;
+        window.loadedTemplates = {}; // Store templates globally
+        window.isUIBusy = false; // Flag to prevent UI refresh during interaction
+
+        async function updateTemplatesUI() {
+            // Only load once - use flag instead of DOM check
+            if (templatesLoaded) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/templates');
+                const data = await response.json();
+                const templates = data.templates || [];
+
+                const container = document.getElementById('template-stats');
+
+                // Store for easy access
+                window.loadedTemplates = {};
+                templates.forEach(t => window.loadedTemplates[t.key] = t);
+
+                if (templates.length > 0) {
+                    let html = '';
+                    templates.forEach(template => {
+                        html += `
+                            <div class="template-item" style="flex-direction: column; align-items: stretch; padding: 1.5rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                                    <div style="flex: 1;">
+                                        <h3 style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                            ${template.name}
+                                            <span style="font-size: 0.8rem; background: var(--bg); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid var(--border); font-weight: normal;">${template.key}</span>
+                                        </h3>
+                                        <p style="color: var(--subtitle); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                            <strong>Triggers:</strong> ${template.keywords}
+                                        </p>
+                                        <p style="color: var(--primary); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;">
+                                            <strong>📄 Resume:</strong> ${template.resume || 'Default'}
+                                        </p>
+                                    </div>
+                                    <button onclick="openTemplateEditor('${template.key}')" 
+                                        style="background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+                                        ✏️ Edit
+                                    </button>
+                                </div>
+                                <div style="background: var(--bg); padding: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.85rem; white-space: pre-wrap; max-height: 300px; overflow-y: auto;">
+${template.full_template}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                    templatesLoaded = true; // Mark as loaded successfully
+                } else {
+                    container.innerHTML = '<div class="empty-state">No templates found</div>';
+                }
+            } catch (e) {
+                console.error('Templates error:', e);
+                document.getElementById('template-stats').innerHTML = '<div class="empty-state">Error loading templates</div>';
+            }
+        }
+
+        // Update send count display when input changes
+        document.addEventListener('DOMContentLoaded', () => {
+            const sendCountInput = document.getElementById('send-count');
+            if (sendCountInput) {
+                sendCountInput.addEventListener('input', (e) => {
+                    document.getElementById('send-count-display').textContent = e.target.value;
+                });
+            }
+        });
+
+        let sendingProcess = null;
+        let logInterval = null;
+
+        async function sendNow() {
+            const count = parseInt(document.getElementById('send-count').value) || 5;
+            const modal = document.getElementById('ai-send-modal');
+            const desc = document.getElementById('send-modal-description');
+            const details = document.getElementById('modal-validation-details');
+            const confirmBtn = document.getElementById('modal-confirm-btn');
+
+            modal.style.display = 'flex';
+            confirmBtn.style.display = 'none';
+            desc.textContent = "🔍 Validating your lead queue...";
+            details.innerHTML = '<div style="text-align: center;"><span class="pulse"></span> Checking system status...</div>';
+
+            try {
+                // Fetch queue and process status for validation
+                const [queueResp, statusResp] = await Promise.all([
+                    fetch('/api/queue/status'),
+                    fetch('/api/scheduler/status')
+                ]);
+
+                const queueData = await queueResp.json();
+                const schedulerData = await statusResp.json();
+
+                const queue = queueData.queue || [];
+                const pending = queue.filter(l => l.status === 'pending' || l.status === 'test');
+
+                let html = '';
+
+                // 1. Check if busy
+                if (schedulerData.status === 'Active' && schedulerData.message && schedulerData.message.includes('running')) {
+                    desc.textContent = "🛑 System Currently Busy";
+                    html = `<div style="color: var(--danger); font-weight: 700;">${schedulerData.message}</div>`;
+                    html += `<div style="font-size: 0.85rem; margin-top: 0.5rem;">Please wait for the background process to finish before starting a manual send.</div>`;
+                    confirmBtn.style.display = 'none';
+                }
+                // 2. Check if empty
+                else if (pending.length === 0) {
+                    desc.textContent = "❌ No Pending Leads Found";
+                    html = `<div style="color: var(--danger); font-weight: 700;">Your queue is empty!</div>`;
+                    html += `<div style="font-size: 0.85rem; margin-top: 0.5rem;">All ${queue.length} leads in your CSV have already been contacted. Go to the <b>Discovery</b> tab to find and import more leads.</div>`;
+                    confirmBtn.style.display = 'none';
+                }
+                // 3. Ready to send
+                else {
+                    desc.textContent = "✨ Intelligence Engine Ready";
+                    const toSend = Math.min(count, pending.length);
+                    html = `<div style="color: var(--success); font-weight: 700; margin-bottom: 0.5rem;">✅ Validation Passed</div>`;
+                    html += `<div>• <b>${pending.length}</b> leads pending in queue</div>`;
+                    html += `<div>• <b>${toSend}</b> emails will be personalized</div>`;
+                    html += `<div>• <b>Exception Bypass</b>: Enabled for tests</div>`;
+
+                    if (toSend < count) {
+                        html += `<div style="color: var(--warning); font-size: 0.8rem; margin-top: 0.5rem;">⚠️ Note: You requested ${count} leads but only ${toSend} are available.</div>`;
+                    }
+
+                    confirmBtn.style.display = 'block';
+                    window.pendingSendCount = toSend;
+                }
+
+                details.innerHTML = html;
+            } catch (e) {
+                desc.textContent = "❌ Connection Error";
+                details.innerHTML = "Could not validate queue status. Is the server running?";
+            }
+        }
+
+        function closeSendModal() {
+            document.getElementById('ai-send-modal').style.display = 'none';
+        }
+
+        async function executeSend() {
+            const count = window.pendingSendCount || 5;
+            closeSendModal();
+
+            const btn = document.getElementById('send-now-btn');
+            const stopBtn = document.getElementById('stop-send-btn');
+            const status = document.getElementById('send-status');
+            const logsDiv = document.getElementById('send-logs');
+            const logsContent = document.getElementById('send-logs-content');
+
+            // Show UI
+            btn.style.display = 'none';
+            stopBtn.style.display = 'inline-block';
+            logsDiv.style.display = 'block';
+            logsContent.innerHTML = '';
+            status.innerHTML = '<span style="color: var(--warning);">⏳ Initializing Intelligence Pipeline...</span>';
+
+            // Restore Simulated AI Feedback (The "AI Pop-up feeling")
+            const aiSteps = [
+                "🧠 Loading context from bio...",
+                "📊 Filtering pending recruiter leads...",
+                "🤖 Initializing LLM Personalization Agent...",
+                "📂 Opening templates repository...",
+                "⚡ Bypassing business hours restriction...",
+                "🚀 Triggering background worker process..."
+            ];
+
+            let step = 0;
+            const stepInterval = setInterval(() => {
+                if (step < aiSteps.length) {
+                    logsContent.innerHTML += `<div style="margin-bottom: 0.4rem;">${aiSteps[step]}</div>`;
+                    logsDiv.scrollTop = logsDiv.scrollHeight;
+                    step++;
+                } else {
+                    clearInterval(stepInterval);
+                }
+            }, 500);
+
+            try {
+                const response = await fetch('/api/send-now', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ count: count })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    status.innerHTML = `<span style="color: var(--success);">✅ ${data.message}</span>`;
+                    logsContent.innerHTML += `<div style="margin-top: 1rem; color: var(--success); font-weight: 700;">✅ Success: ${data.message}</div>`;
+                    logsContent.innerHTML += `<div style="color: var(--subtitle); font-size: 0.8rem;">Monitor the terminal or Activity tab for live email updates.</div>`;
+
+                    updateSendHistory();
+                    setTimeout(() => {
+                        updateDashboard();
+                        updateQueueUI();
+                    }, 3000);
+                } else {
+                    status.innerHTML = `<span style="color: var(--danger);">❌ ${data.error || 'Failed to send'}</span>`;
+                    logsContent.innerHTML += `<div style="color: var(--danger); margin-top: 1rem; font-weight: 700;">❌ Error: ${data.error}</div>`;
+                }
+            } catch (e) {
+                status.innerHTML = '<span style="color: var(--danger);">❌ Network error</span>';
+            } finally {
+                setTimeout(() => {
+                    btn.style.display = 'inline-block';
+                    stopBtn.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        async function updateSendHistory() {
+            try {
+                const response = await fetch('/api/send-history');
+                const data = await response.json();
+                const container = document.getElementById('history-list');
+                const badge = document.getElementById('click-count-badge');
+
+                if (data.clicks && data.clicks.length > 0) {
+                    badge.textContent = `${data.clicks.length} total clicks`;
+                    let html = '';
+                    // Reverse to show latest first
+                    const reversedClicks = [...data.clicks].reverse();
+                    reversedClicks.forEach(click => {
+                        html += `
+                            <div style="padding: 0.6rem; background: white; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 0.85rem; display: flex; justify-content: space-between;">
+                                <span>📅 ${click.timestamp}</span>
+                                <span style="font-weight: 700; color: var(--primary);">Count: ${click.count}</span>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                } else {
+                    badge.textContent = '0 clicks';
+                    container.innerHTML = '<div style="color: var(--subtitle); font-style: italic; font-size: 0.9rem;">No manual sends recorded yet.</div>';
+                }
+            } catch (e) {
+                console.error('History Error:', e);
+            }
+        }
+
+        function stopSending() {
+            if (logInterval) {
+                clearInterval(logInterval);
+            }
+
+            document.getElementById('stop-send-btn').style.display = 'none';
+            document.getElementById('send-now-btn').style.display = 'inline-block';
+            document.getElementById('send-status').innerHTML = '<span style="color: var(--warning);">\u26a0\ufe0f Stopping...</span>';
+            document.getElementById('send-logs-content').innerHTML += '<div style="color: var(--warning); margin-top: 0.5rem; font-weight: 700;">\ud83d\uded1 Stopped by user</div>';
+
+            // Note: Backend process may still complete
+            alert('\u26a0\ufe0f Note: Already-started emails may still be sent.\nCheck Activity tab to verify.');
+        }
+
+        // Load and display active schedule
+        async function loadScheduleDisplay() {
+            try {
+                const [scheduleResp, statusResp] = await Promise.all([
+                    fetch('/api/schedule'),
+                    fetch('/api/scheduler/status')
+                ]);
+
+                if (!scheduleResp.ok || !statusResp.ok) return;
+
+                const schedule = await scheduleResp.json();
+                const status = await statusResp.json();
+
+                // Update status badge and toggle button
+                const badge = document.getElementById('schedule-status-badge');
+                const toggleBtn = document.getElementById('scheduler-toggle-btn');
+
+                if (badge) {
+                    if (schedule.auto_enabled && status.status === 'Active') {
+                        badge.textContent = 'ACTIVE';
+                        badge.style.background = 'var(--success)';
+                        if (toggleBtn) {
+                            toggleBtn.textContent = '🛑 Stop Scheduler';
+                            toggleBtn.style.background = 'var(--danger)';
+                        }
+                    } else if (status.status === 'Ended') {
+                        badge.textContent = 'ENDED';
+                        badge.style.background = 'var(--danger)';
+                        if (toggleBtn) {
+                            toggleBtn.textContent = '▶️ Start Scheduler';
+                            toggleBtn.style.background = 'var(--success)';
+                        }
+                    } else {
+                        badge.textContent = 'DISABLED';
+                        badge.style.background = 'var(--subtitle)';
+                        if (toggleBtn) {
+                            toggleBtn.textContent = '▶️ Start Scheduler';
+                            toggleBtn.style.background = 'var(--success)';
+                        }
+                    }
+                }
+
+                // Update start time
+                const startDisplay = document.getElementById('schedule-start-display');
+                if (startDisplay) {
+                    if (schedule.start_time) {
+                        const startDate = new Date(schedule.start_time);
+                        startDisplay.textContent = startDate.toLocaleString();
+                    } else {
+                        startDisplay.textContent = 'Immediate';
+                    }
+                }
+
+                // Update end time
+                const endDisplay = document.getElementById('schedule-end-display');
+                if (endDisplay) {
+                    if (schedule.end_time) {
+                        const endDate = new Date(schedule.end_time);
+                        endDisplay.textContent = endDate.toLocaleString();
+
+                        // Calculate days remaining
+                        const now = new Date();
+                        const daysRemaining = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
+
+                        const daysRemainingDiv = document.getElementById('schedule-days-remaining');
+                        const daysRemainingText = document.getElementById('days-remaining-text');
+                        if (daysRemaining > 0) {
+                            daysRemainingDiv.style.display = 'block';
+                            daysRemainingText.textContent = `⏰ ${daysRemaining} days remaining until end date`;
+                        } else {
+                            daysRemainingDiv.style.display = 'none';
+                        }
+                    } else {
+                        endDisplay.textContent = 'Continuous';
+                        document.getElementById('schedule-days-remaining').style.display = 'none';
+                    }
+                }
+
+                // Update batch size
+                const batchDisplay = document.getElementById('schedule-batch-display');
+                if (batchDisplay) {
+                    const batchSize = schedule.batch_size || 5;
+                    batchDisplay.textContent = `${batchSize} ${batchSize === 1 ? 'email' : 'emails'}`;
+                }
+
+            } catch (e) {
+                console.error('Error loading schedule display:', e);
+            }
+        }
+
+        // Initial load
+        updateDashboard();
+        updateQueueUI();
+        updateTemplatesUI(); // Load templates once on page load
+        loadScheduleDisplay(); // Load schedule display
+        updateSendHistory(); // Load send history
+
+        setInterval(() => {
+            // Only update stats (lightweight)
+            updateDashboard();
+            loadScheduleDisplay(); // Refresh schedule display
+            updateSendHistory(); // Refresh history
+        }, 10000);
+
+        // Update queue/discovery only when visible
+        setInterval(() => {
+            const activeTab = document.querySelector('.tab.active');
+            if (activeTab && activeTab.textContent.includes('Queue')) {
+                updateQueueUI();
+            }
+            if (activeTab && activeTab.textContent.includes('Discovery')) {
+                updateDiscoveryUI();
+            }
+        }, 10000);
+
+        // Settings Functions
+        async function loadSettings() {
+            try {
+                const response = await fetch('/api/schedule');
+                if (!response.ok) return;
+                const config = await response.json();
+
+                document.getElementById('setting-auto-enabled').checked = config.auto_enabled || false;
+                document.getElementById('auto-pilot-settings').style.display = config.auto_enabled ? 'block' : 'none';
+
+                document.getElementById('setting-start-time').value = config.start_time || '';
+                document.getElementById('setting-end-time').value = config.end_time || '';
+                document.getElementById('setting-batch-size').value = config.batch_size || 5;
+
+                // Handle interval dropdown - check if value matches a preset
+                const interval = config.batch_interval || 60;
+                const intervalSelect = document.getElementById('setting-batch-interval');
+                const presetValues = ['60', '720', '1440', '10080', '43200'];
+                if (presetValues.includes(String(interval))) {
+                    intervalSelect.value = interval;
+                    document.getElementById('custom-interval-group').style.display = 'none';
+                } else {
+                    intervalSelect.value = 'custom';
+                    document.getElementById('custom-interval-group').style.display = 'block';
+                    document.getElementById('setting-custom-interval').value = interval;
+                }
+
+
+                document.getElementById('setting-daily-limit').value = config.daily_limit || 30;
+                document.getElementById('setting-delay').value = config.delay_seconds || 30;
+                document.getElementById('setting-business-hours').checked = config.business_hours_only || false;
+                document.getElementById('setting-start-hour').value = config.start_hour || 9;
+                document.getElementById('setting-end-hour').value = config.end_hour || 17;
+                document.getElementById('setting-smtp-email').value = config.smtp_email || 'rikinshah787@gmail.com';
+                if (config.auto_enabled) {
+                    pollSchedulerStatus();
+                }
+            } catch (e) {
+                console.error('Error loading settings:', e);
+            }
+        }
+
+        // Global variable to store next run time for countdown
+        let schedulerNextRunTime = null;
+        let countdownInterval = null;
+
+        async function pollSchedulerStatus() {
+            const card = document.getElementById('scheduler-status-card');
+            if (!document.getElementById('setting-auto-enabled').checked) {
+                card.style.display = 'none';
+                if (countdownInterval) clearInterval(countdownInterval);
+                return;
+            }
+            card.style.display = 'block';
+
+            try {
+                const response = await fetch('/api/scheduler/status');
+                const data = await response.json();
+
+                // Update status badge
+                const badge = document.getElementById('scheduler-state-badge');
+                badge.textContent = data.status || 'Unknown';
+                badge.style.background = data.status === 'Active' ? 'rgba(16,185,129,0.3)' : 'rgba(255,255,255,0.2)';
+
+                // Get next_check time from API response
+                if (data.next_check) {
+                    schedulerNextRunTime = new Date(data.next_check);
+                    document.getElementById('next-run-date').textContent = schedulerNextRunTime.toLocaleString();
+
+                    // Start countdown if not already running
+                    if (!countdownInterval) {
+                        startCountdownTimer();
+                    }
+                } else if (data.config && data.config.start_time) {
+                    // Fallback to config start_time
+                    schedulerNextRunTime = new Date(data.config.start_time.replace('T', ' '));
+                    document.getElementById('next-run-date').textContent = schedulerNextRunTime.toLocaleString();
+                    if (!countdownInterval) {
+                        startCountdownTimer();
+                    }
+                }
+
+                // Show message
+                document.getElementById('scheduler-message').textContent = data.message || '';
+
+            } catch (e) {
+                console.error("Scheduler poll error", e);
+            }
+
+            // Poll API every 30 seconds (countdown ticks every second independently)
+            setTimeout(pollSchedulerStatus, 30000);
+        }
+
+        function startCountdownTimer() {
+            // Clear any existing interval
+            if (countdownInterval) clearInterval(countdownInterval);
+
+            countdownInterval = setInterval(() => {
+                if (!schedulerNextRunTime) {
+                    const els = ['countdown-display', 'overview-countdown'];
+                    els.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.textContent = '--:--:--';
+                    });
+                    return;
+                }
+
+                const now = new Date();
+                const diff = schedulerNextRunTime - now;
+
+                if (diff <= 0) {
+                    const els = ['countdown-display', 'overview-countdown'];
+                    els.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.textContent = '🚀 Running!';
+                    });
+                    // Refresh status after a few seconds
+                    setTimeout(() => pollSchedulerStatus(), 5000);
+                    return;
+                }
+
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                const display = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                // Update both countdown displays
+                const countdownEl = document.getElementById('countdown-display');
+                if (countdownEl) countdownEl.textContent = display;
+
+                const overviewEl = document.getElementById('overview-countdown');
+                if (overviewEl) overviewEl.textContent = display;
+
+                // Update the next run date displays
+                const dateStr = schedulerNextRunTime.toLocaleString();
+                const nextDateEl = document.getElementById('next-run-date');
+                if (nextDateEl) nextDateEl.textContent = dateStr;
+                const overviewDateEl = document.getElementById('overview-next-date');
+                if (overviewDateEl) overviewDateEl.textContent = dateStr;
+
+            }, 1000); // Tick every second
+        }
+
+
+
+        async function saveSettings() {
+            const btn = document.querySelector('#settings-tab button');
+            const status = document.getElementById('settings-status');
+            const originalText = btn.innerHTML;
+
+            btn.innerHTML = '⏳ Saving...';
+            btn.disabled = true;
+            status.innerHTML = '';
+
+            try {
+                // Get interval - from dropdown or custom input
+                const intervalSelect = document.getElementById('setting-batch-interval').value;
+                const batchInterval = intervalSelect === 'custom'
+                    ? parseInt(document.getElementById('setting-custom-interval').value)
+                    : parseInt(intervalSelect);
+
+                const config = {
+                    auto_enabled: document.getElementById('setting-auto-enabled').checked,
+                    start_time: document.getElementById('setting-start-time').value,
+                    end_time: document.getElementById('setting-end-time').value,
+                    batch_size: parseInt(document.getElementById('setting-batch-size').value),
+                    batch_interval: batchInterval,
+
+
+                    daily_limit: parseInt(document.getElementById('setting-daily-limit').value),
+                    delay_seconds: parseInt(document.getElementById('setting-delay').value),
+                    business_hours_only: document.getElementById('setting-business-hours').checked,
+                    start_hour: parseInt(document.getElementById('setting-start-hour').value),
+                    end_hour: parseInt(document.getElementById('setting-end-hour').value),
+                    smtp_email: document.getElementById('setting-smtp-email').value
+                };
+                const response = await fetch('/api/schedule/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(config)
+                });
+
+                if (response.ok) {
+                    status.innerHTML = '<span style="color: var(--success);">✅ Settings saved successfully!</span>';
+                    setTimeout(() => status.innerHTML = '', 3000);
+                } else {
+                    const data = await response.json();
+                    status.innerHTML = `<span style="color: var(--danger);">❌ Error: ${data.error || 'Failed to save'}</span>`;
+                }
+            } catch (e) {
+                status.innerHTML = '<span style="color: var(--danger);">❌ Network error</span>';
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // Initialize Settings on load
+        document.addEventListener('DOMContentLoaded', loadSettings);
+
+        // Template Editor Functions
+        let currentEditingKey = null;
+
+        function openTemplateEditor(key) {
+            const template = window.loadedTemplates[key];
+            if (!template) {
+                console.error("Template not found:", key);
+                return;
+            }
+
+            currentEditingKey = key;
+            document.getElementById('edit-template-name').textContent = template.name;
+            document.getElementById('edit-template-resume').value = template.resume || 'resume_shah_1.pdf';
+
+            // Load content into Quill
+            // If it looks like HTML, load as HTML, otherwise convert newlines
+            let content = template.full_template;
+            if (!content.includes('<p>') && !content.includes('<br>')) {
+                // Convert plain text newlines to HTML for display
+                content = content.replace(/\n/g, '<br>');
+            }
+
+            quill.clipboard.dangerouslyPasteHTML(content);
+
+            const modal = document.getElementById('template-editor-modal');
+            modal.style.display = 'flex';
+        }
+
+        function closeTemplateEditor() {
+            document.getElementById('template-editor-modal').style.display = 'none';
+            currentEditingKey = null;
+        }
+
+        async function saveTemplate() {
+            if (!currentEditingKey) return;
+
+            const resume = document.getElementById('edit-template-resume').value;
+            // Get HTML content from Quill
+            const content = quill.root.innerHTML;
+
+            const btn = document.querySelector('#template-editor-modal button[onclick="saveTemplate()"]');
+
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '⏳ Saving...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/api/templates/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        key: currentEditingKey,
+                        resume: resume,
+                        template: content
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Force reload templates
+                    templatesLoaded = false;
+                    await updateTemplatesUI();
+                    closeTemplateEditor();
+                    alert('✅ Template saved successfully!');
+                } else {
+                    alert('❌ Error: ' + (data.error || 'Failed to save'));
+                }
+            } catch (e) {
+                console.error(e);
+                alert('❌ Network error');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+
+    <!-- Template Editor Modal -->
+    <div id="template-editor-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+        <div
+            style="background: #ffffff; padding: 2rem; border-radius: 12px; width: 90%; max-width: 800px; border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+            <h2 style="margin-bottom: 1.5rem; color: var(--text);">✏️ Edit Template: <span
+                    id="edit-template-name"></span>
+            </h2>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--subtitle);">Attached
+                    Resume</label>
+                <select id="edit-template-resume"
+                    style="width: 100%; padding: 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+                    <option value="resume_shah_1.pdf">resume_shah_1.pdf (SAP Focused)</option>
+                    <option value="resume_shah_2.pdf">resume_shah_2.pdf (AI/GenAI Focused)</option>
+                    <option value="resume_shah_3.pdf">resume_shah_3.pdf (Software Engineer)</option>
+                    <option value="resume_shah_4.pdf">resume_shah_4.pdf (General)</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--subtitle);">Email Content (Rich
+                    Text)</label>
+                <!-- Quill Editor Container -->
+                <div id="quill-editor-container" style="height: 300px; background: white; color: var(--text);">
+                </div>
+                <textarea id="edit-template-content" style="display: none;"></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                <button onclick="closeTemplateEditor()"
+                    style="padding: 0.8rem 1.5rem; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer;">Cancel</button>
+                <button onclick="saveTemplate()"
+                    style="padding: 0.8rem 1.5rem; border-radius: 6px; border: none; background: var(--success); color: white; cursor: pointer;">💾
+                    Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Send Confirmation Modal -->
+    <div id="ai-send-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(8px);">
+        <div
+            style="background: white; padding: 2.5rem; border-radius: 16px; width: 90%; max-width: 500px; border: 1px solid var(--primary); box-shadow: 0 20px 50px rgba(0,0,0,0.3); text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🤖</div>
+            <h2 style="margin-bottom: 0.5rem; color: var(--text);">Ready for AI Outreach?</h2>
+            <p id="send-modal-description" style="color: var(--subtitle); margin-bottom: 1.5rem;">Validating your lead
+                queue...</p>
+
+            <div id="modal-validation-details"
+                style="background: var(--bg); padding: 1rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid var(--border); text-align: left; font-size: 0.95rem;">
+                <!-- Validation details injected here -->
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button onclick="closeSendModal()"
+                    style="padding: 0.8rem 1.5rem; border-radius: 8px; border: 1px solid var(--border); background: white; color: var(--text); cursor: pointer; font-weight: 600;">Wait,
+                    Cancel</button>
+                <button id="modal-confirm-btn" onclick="executeSend()"
+                    style="padding: 0.8rem 2rem; border-radius: 8px; border: none; background: var(--success); color: white; cursor: pointer; font-weight: 700; display: none;">🚀
+                    Yes, Send Now!</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Quill
+        var quill = new Quill('#quill-editor-container', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                    ['blockquote', 'code-block'],
+                    [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+                    [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+                    [{ 'direction': 'rtl' }],                         // text direction
+                    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+                    [{ 'font': [] }],
+                    [{ 'align': [] }],
+                    ['link', 'clean']                                         // remove formatting button
+                ]
+            }
+        });
+    </script>
+</body>
+
+</html>
